@@ -70,8 +70,16 @@ void LinkedList_read(LinkedList *L){
     //return;
 }
 
-int LinkedList_size(LinkedList *L){
+int LinkedList_size(const LinkedList *L){
     return L->size;
+}
+
+int LinkedList_begin(const LinkedList *L){
+    return L->begin->val;
+}
+
+int LinkedList_end(const LinkedList *L){
+    return L->end->val;
 }
 
 bool LinkedList_is_empty(const LinkedList *L){
@@ -107,12 +115,23 @@ void LinkedList_print(const LinkedList *L){
     while(p != NULL){ // Enquanto p estiver apontando para um Nó válido
         printf("%d ", p->val);
         p = p->next;
-    }
-    
+    } 
 }
 
-// void LinkedList_destroy(LinkedList *L){
-    
-// }
+void LinkedList_destroy(LinkedList **L_ref){
+    LinkedList *L = *L_ref;
+
+    SNode *p = L->begin;
+    SNode *aux = NULL;
+
+    while(p != NULL){
+        aux = p;
+        p = p->next;
+        free(aux);
+    }
+    free(L);
+
+    *L_ref = NULL;
+}
 
 //****************************************************************************//

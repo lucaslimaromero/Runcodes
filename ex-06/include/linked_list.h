@@ -23,7 +23,13 @@ bool LinkedList_repeated_elem(const LinkedList *L, int elem); // Essa função v
 
 
 // Retorna o tamanho da lista
-int LinkedList_size(LinkedList *L);
+int LinkedList_size(const LinkedList *L);
+
+// Retorna o primeiro elemento
+int LinkedList_begin(const LinkedList *L);
+
+// Retorna o último elemento da lista
+int LinkedList_end(const LinkedList *L);
 
 // Inserção na cauda (final) da lista
 void LinkedList_add_last(LinkedList *L, int val);
@@ -32,12 +38,7 @@ void LinkedList_add_last(LinkedList *L, int val);
 void LinkedList_print(const LinkedList *L);
 
 // Funções para desalocar a LinkedList
-void LinkedList_destroy(LinkedList *L);
-
-
-
-
-
+void LinkedList_destroy(LinkedList **L_ref);
 
 //*************************************************************************************//
 
