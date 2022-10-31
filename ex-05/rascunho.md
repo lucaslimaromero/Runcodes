@@ -30,4 +30,3 @@
     - begin = (begin + 1) % capacity;
 
 . Fila vazia => begin = end = 0
-

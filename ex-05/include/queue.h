@@ -7,26 +7,19 @@
 
 // Declaração da struct das Filas Estáticas
 
-typedef struct _pessoa Pessoa;
+typedef struct _node Node;
 typedef struct _queue Queue; 
 
 // Assinatura das Funções do TAD
 
-char *readline();
-void free_readline(char *line);
-
-Queue *Queue_create(long capacity);
+int Queue_size(const Queue *Q);
+Queue *Queue_create();
 void Queue_destroy(Queue **Q_ref);
 
+void Node_add(char *name, int age, int cond, Queue *Q);
+void Node_remove(Queue *Q);
+
 bool Queue_is_empty(const Queue *Q);
-bool Queue_is_full(const Queue *Q);
-int Queue_size(const Queue *Q);
-
-void Queue_enqueue(Queue *Q, int val);
-int Queue_peek(const Queue *Q);
-int Queue_dequeue(Queue *Q);
-
-void Queue_print(const Queue *Q);
 
 //************************************************************************//
 
