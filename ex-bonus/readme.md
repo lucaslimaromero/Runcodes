@@ -38,8 +38,8 @@ o necessario
 
 - Função List_remove está removendo todos os elementos da lista! (SOLVED)
 - Função List_add não funciona quando adiciona-se um elemento no fim da lista (SOLVED)
-- Função print e inverted_print estão com problemas, não imprimem todos os elementos da lista
-- De alguma forma, quando ocorre uma adição no meio, as funções print bugam conforme explicitado acima
-- O nome colocado no meio da lista passa a ser o limite final da função print e inicial da função inverted print
-- Além disso, se colocarmos 2 nomes no meio da lista, o programa finaliza com o código de erro: make: *** [Error-1073741819] 
+- Função print e inverted_print estão com problemas, não imprimem todos os elementos da lista (SOLVED)
+- De alguma forma, quando ocorre uma adição no meio, as funções print bugam conforme explicitado acima (SOLVED)
+- O nome colocado no meio da lista passa a ser o limite final da função print e inicial da função inverted print (SOLVED)
+- Além disso, se colocarmos 2 nomes no meio da lista, o programa finaliza com o código de erro: make: ***  [Error-1073741819] (SOLVED)
 

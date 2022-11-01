@@ -98,9 +98,10 @@ void List_add(List *L, char *name, int priority){
             else{
                 aux->next = node;
                 p->prev = node;
+                node->next = p;
+                node->prev = aux;
                 L->size++;
             }
-            
         }
         // Sugestão: fazer uma condicional para o Caso 2, de modo a reduzir a complexidade do problema
         // Error -1073741819
@@ -178,6 +179,10 @@ char *ReadLine(){ // Essa função retorna uma string alocada dinamicamente a ca
         line[size - 1] = c;
 
     } while(c != ' ' && c != '\n' && c != '\r' && c != EOF);
+
+    if(c == EOF){
+        exit(0);
+    }
 
     line[size - 1] = '\0';
 

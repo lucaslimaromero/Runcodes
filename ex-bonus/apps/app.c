@@ -38,9 +38,9 @@ int main(){
             List_inverted_print(L);
         }
         // Para teste
-        else if(strcmp(comando, "x") == 0){
-            break;
-        }
+        // else if(strcmp(comando, "x") == 0){
+        //     break;
+        // }
         else{
             printf("Comando Invalido\n");
         }
