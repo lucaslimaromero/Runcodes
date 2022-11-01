@@ -12,7 +12,7 @@
 
 # ENTRADA
 - A entrada conterá várias linhas (EOF), cada uma com um dos comandos abaixo:
-    . Inserir -> será passado o código de prioridade e o nome da pessoa, caso um código seja repetido, imprime-se inválido
+    . Inserir -> será passado o código de prioridade e o nome da pessoa, caso um código seja repetido, imprime-se "INVALIDO"
     . Remover -> deve-se retirar a primeira pessoa da fila, caso ela estive vazia, printe "Fila Vazia" como saída
     . ImprimirEmOrdem -> imprimir a fila em ordem no formato: cod1 - nome1; cod2 - nome2; ... Se a fila estiver vazia, printe "Fila Vazia"
     . ImprimirInvetido -> imprimir a fila invetida no formato codn - nome n; cod n-1; nome n-1;...Se a fila estiver vazia, printe "Fila Vazia"
@@ -30,7 +30,7 @@
 • As strings (nomes) devem ser recebidos de maneira dinamica e nao deve ser alocado mais bytes do que
 o necessario
 
-• E necess´ario fazer um TAD lista ligada para execucao do exercıcio
+• E necessario fazer um TAD lista ligada para execucao do exercıcio
 
 • A fila nao tera um tamanho maximo de pessoas.
 

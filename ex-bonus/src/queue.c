@@ -1,31 +1,33 @@
 #include "queue.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <stddef.h>
-
-//*************************** IMPLEMENTAÇÃO DO TAD ***************************//
+#include <stdio.h>
 
 typedef struct _doubly_node{
-    int val;
+    char *name;
+    int priority;
     struct _doubly_node *next;
     struct _doubly_node *prev;
 } DoublyNode, Node;
 
 typedef struct _doubly_linked_list{
+    int size;
     Node *begin;
     Node *end;
-    size_t size;
 } DoublyLinkedList, List;
 
-Node *Node_create(int val){
+// Criação do Nó - Função chamada por outras que adicionam nós
+void *Node_create(char *name, int priority){
     Node *node = (Node *) calloc(1, sizeof(Node));
-    node->val = val;
+
+    node->name = name;
+    node->priority = priority;
     node->next = NULL;
     node->prev = NULL;
 
     return node;
 }
+
+// Criação da Lista
 List *List_create(){
     List *L = (List *) calloc(1, sizeof(List));
     L->begin = NULL;
@@ -35,6 +37,7 @@ List *List_create(){
     return L;
 }
 
+// Destruição da Lista
 void List_destroy(List **L_ref){
     List *L = *L_ref;
     Node *p = L->begin;
@@ -50,132 +53,117 @@ void List_destroy(List **L_ref){
     *L_ref = NULL;
 }
 
+// Função que retorna 1 se a lista estiver vazia
 bool List_is_empty(const List *L){
-    return L->size == 0; // Se estiver vazia retorna 1 (true)
+    return (L->size == 0);
 }
 
+// Função que adiciona as pessoas de acordo com a ordem de prioridade
+void List_add(List *L, char *name; int priority){
+    Node *node = Node_create(name, priority); // Nó a ser inserido
 
-void List_add_first(List *L, int val){
-    Node *p = Node_create(val);
-    p->next = L->begin; // Não atrapalha caso a lista estiver vazia e é crucial caso ela não esteja
-
-    if(List_is_empty(L)){ // Lista vazia
-        L->end = p;
-    }
-    else{ // Lista não vazia
-        L->begin->prev = p; // Essa linha só pode ser executada se L->begin for NÃO NULO, ou seja, se a lista não tiver vazia
-    }
-
-    L->begin = p;
-    L->size++;
-}
-
-void List_add_last(List *L, int val){
-    Node *p = Node_create(val);
-
-    // Lista vazia
+    // Lista Vazia
     if(List_is_empty(L)){
-        L->begin = p;
-        // L->end = p;
+        L->begin = L->end = node;
+        L->size++;
     }
-    // Lista possui elementos
-    else{
-        L->end->next = p; // O próximo nó do nosso nó final antigo será o nosso novo nó
-        p->prev = L->end; 
-        // L->end = p;
-    }
+    // Lista com elementos
+    else{ // Será necessário analisar as prioridades
+        Node *p = L->begin; // Ponteiro que guarda no final do while o nó posterior ao nó a ser inserido
+        Node *aux = p; // Ponteiro que guarda no final do while o nó anterior ao nó a ser inserido
 
-    L->end = p;
-    L->size++;
+        while(node->priority > p->priority){
+            aux = p;
+            p = p->next;
+        }
+
+        if(node->priority == p->priority){
+            printf("INVALIDO\n");
+        }
+
+        else{
+            aux->next = node;
+            p->prev = node;
+            L->size++;
+        }
+    }
 }
 
+// Função que remove a primeira pessoa da fila
+void List_remove(List *L){
+    Node *p = L->begin;
+    if(List_is_empty(L)){
+        printf("Fila Vazia\n");
+    }
+    else{
+        L->begin = p->next;
+
+        if(p == L->end){ // Lista com apenas 1 elemento
+            L->end = NULL;
+        }
+        else{
+            p->next->prev = NULL;
+        }
+        
+        free(p->name);
+        free(p);
+
+        L->size--;
+    }
+}
+
+// Função que imprime em ordem
 void List_print(const List *L){
     Node *p = L->begin;
 
-    printf("L -> ");
-    while(p != NULL){
-        printf("%d -> ", p->val);
-        p = p->next;
-    }
-    puts("NULL");
-
-    if(L->end == NULL){ // Lista vazia
-        printf("L->end = NULL\n");
+    if(List_is_empty(L)){
+        printf("Lista Vazia\n");
     }
     else{
-        printf("L->end = %d\n", L->end->val);
+        while(p != NULL){
+            printf("%d - %s; ", p->priority, p->name);
+            p = p->next;
+        }
     }
-
-    printf("Size: %lu\n", L->size);
     puts("");
 }
 
+// Função que imprime invertido
 void List_inverted_print(const List *L){
     Node *p = L->end;
 
-    printf("L -> end -> ");
-    while(p != NULL){
-        printf("%d -> ", p->val);
-        p = p->prev;
-    }
-    puts("NULL");
-
-    if(L->end == NULL){ // Lista vazia
-        printf("L->begin = NULL\n");
+    if(List_is_empty(L)){
+        printf("Lista Vazia\n");
     }
     else{
-        printf("L->begin = %d\n", L->begin->val);
+        while(p != NULL){
+            printf("%d - %s; ", p->priority, p->name);
+            p = p->prev;
+        }
     }
-
-    printf("Size: %lu\n", L->size);
     puts("");
 }
 
-void List_remove(List *L, int val){
-    if(!List_is_empty(L)){
-        Node *p = L->begin;
-        if(L->begin->val == val){ // Caso 1: Removendo da cabeça da lista
+// Função para ler nomes
+char *ReadLine(){ // Essa função retorna uma string alocada dinamicamente a cada char
+    char *line = NULL;
+    char c = '\0';
+    int size = 0;
 
-            L->begin = p->next;
+    while ((c = getchar()) == '\n'  || c == '\r');
 
-            if(L->end == p){ // Se a lista possuir apenas um elemento 
-                // L->begin = NULL; é equivalente a L->begin = p->next;
-                L->end = NULL;
-            }
-            else{ // Lista possui mais de um elemento
-                p->next->prev = NULL;
-            }
-            free(p);
-            L->size--;
-        }
+    if (c != EOF)
+        ungetc(c, stdin);
 
-        else{ // Caso 2: No meio da lista
-            p = p->next;
+    do{
+        c = getchar();
+        line = (char *) realloc(line, ++size * sizeof(char));
+        line[size - 1] = c;
 
-            while(p != NULL){
-                if(p->val == val){
-                    p->prev->next = p->next;
-                    if(p == L->end){ // Caso 3, é o nó final
-                        L->end = p->prev;
-                        // L->end->next = NULL;
-                    }
-                    else{ // Caso 2: meio da lista
-                        //p->prev->next = p->next;
-                        p->next->prev = p->prev;
-                    }
+    } while(c != ' ' && c != '\n' && c != '\r' && c != EOF);
 
-                    free(p);
-                    p = NULL;
-                    L->size--;
-                }
-                else{
-                    p = p->next;
-                }
-                    
-            }
-        }
-        
-    }
+    line[size - 1] = '\0';
+
+    return line;
 }
 
-//*************************** FIM DA IMPLEMENTAÇÃO DO TAD ********************//
