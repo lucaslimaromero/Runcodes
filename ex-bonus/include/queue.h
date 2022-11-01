@@ -1,12 +1,14 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include <stdbool.h>
+
 //*************************** HEADER DO TAD - ESPECIFICAÇÃO ***************************//
 
 typedef struct _doubly_node DoublyNode, Node; // Dois apelidos para as mesmas coisas, para simplificar ainda mais
 typedef struct _doubly_linked_list DoublyLinkedList, List;
 
-// Assinatura das Funções do TAD
+// Assinatura das Funções do TAD 
 
 // Criação do nó
 Node *Node_create(char *name, int priority);
@@ -21,7 +23,7 @@ void List_destroy(List **L_ref);
 bool List_is_empty(const List *L);
 
 // Adiciona pessoas
-void List_add(List *L, char *name, int priority);
+void List_add(List *L, char *nome, int prioridade);
 
 // Função de impressão 
 void List_print(const List *L);

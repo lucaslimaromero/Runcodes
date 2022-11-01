@@ -10,13 +10,13 @@ typedef struct _doubly_node{
 } DoublyNode, Node;
 
 typedef struct _doubly_linked_list{
-    int size;
     Node *begin;
     Node *end;
+    int size;
 } DoublyLinkedList, List;
 
 // Criação do Nó - Função chamada por outras que adicionam nós
-void *Node_create(char *name, int priority){
+Node *Node_create(char *name, int priority){
     Node *node = (Node *) calloc(1, sizeof(Node));
 
     node->name = name;
@@ -59,7 +59,7 @@ bool List_is_empty(const List *L){
 }
 
 // Função que adiciona as pessoas de acordo com a ordem de prioridade
-void List_add(List *L, char *name; int priority){
+void List_add(List *L, char *name, int priority){
     Node *node = Node_create(name, priority); // Nó a ser inserido
 
     // Lista Vazia
@@ -67,25 +67,44 @@ void List_add(List *L, char *name; int priority){
         L->begin = L->end = node;
         L->size++;
     }
+
     // Lista com elementos
     else{ // Será necessário analisar as prioridades
-        Node *p = L->begin; // Ponteiro que guarda no final do while o nó posterior ao nó a ser inserido
-        Node *aux = p; // Ponteiro que guarda no final do while o nó anterior ao nó a ser inserido
 
-        while(node->priority > p->priority){
-            aux = p;
-            p = p->next;
-        }
-
-        if(node->priority == p->priority){
-            printf("INVALIDO\n");
-        }
-
-        else{
-            aux->next = node;
-            p->prev = node;
+        if(node->priority < L->begin->priority){ // Caso 1 - Adicionando na cabeça
+            node->next = L->begin;
+            L->begin->prev = node;
+            L->begin = node;
             L->size++;
         }
+        else if(node->priority > L->end->priority){ // Caso 2 - Adicionando na cauda
+            node->prev = L->end;
+            L->end->next = node;
+            L->end = node;
+            L->size++;
+        }
+        else{ // Caso 3 - Adicionando no meio
+            Node *p = L->begin; // Ponteiro que guarda no final do while o nó posterior ao nó a ser inserido
+            Node *aux = p; // Ponteiro que guarda no final do while o nó anterior ao nó a ser inserido
+
+            while(node->priority > p->priority){
+                aux = p;
+                p = p->next;
+            }
+            
+            if(node->priority == p->priority){ // Caso as prioridades forem iguais, a lista não é incrementada
+                printf("INVALIDO\n");
+            }
+            else{
+                aux->next = node;
+                p->prev = node;
+                L->size++;
+            }
+            
+        }
+        // Sugestão: fazer uma condicional para o Caso 2, de modo a reduzir a complexidade do problema
+        // Error -1073741819
+        // O erro está em não manipular corretamente os dados quando tem que adicionar na cauda
     }
 }
 
@@ -105,43 +124,41 @@ void List_remove(List *L){
             p->next->prev = NULL;
         }
         
-        free(p->name);
         free(p);
-
         L->size--;
     }
 }
 
 // Função que imprime em ordem
 void List_print(const List *L){
-    Node *p = L->begin;
 
     if(List_is_empty(L)){
         printf("Lista Vazia\n");
     }
     else{
+        Node *p = L->begin;
         while(p != NULL){
             printf("%d - %s; ", p->priority, p->name);
             p = p->next;
         }
+        printf("\n");
     }
-    puts("");
 }
 
 // Função que imprime invertido
 void List_inverted_print(const List *L){
-    Node *p = L->end;
 
     if(List_is_empty(L)){
         printf("Lista Vazia\n");
     }
     else{
+        Node *p = L->end;
         while(p != NULL){
             printf("%d - %s; ", p->priority, p->name);
             p = p->prev;
         }
+        printf("\n");
     }
-    puts("");
 }
 
 // Função para ler nomes
@@ -150,7 +167,7 @@ char *ReadLine(){ // Essa função retorna uma string alocada dinamicamente a ca
     char c = '\0';
     int size = 0;
 
-    while ((c = getchar()) == '\n'  || c == '\r');
+    while ((c = getchar()) == '\n' || c == '\r');
 
     if (c != EOF)
         ungetc(c, stdin);
@@ -164,6 +181,12 @@ char *ReadLine(){ // Essa função retorna uma string alocada dinamicamente a ca
 
     line[size - 1] = '\0';
 
-    return line;
+    if(size >= 50){ // Verificar se é >= ou apenas >
+        printf("INVALIDO\n");
+        return NULL;
+    }
+    else{
+        return line;
+    }
 }
 
