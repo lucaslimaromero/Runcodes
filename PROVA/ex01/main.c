@@ -26,15 +26,8 @@ bool ArvBin_is_empty(ArvBin *raiz); // Retorna 1 se a árvore estiver vazia
 int ArvBin_height(ArvBin *raiz); // Recebe inicialmente a raiz da árvore a ser analisada, e depois cada nó
 int ArvBin_amount_nodes(ArvBin *raiz);
 
-// Percorrendo uma Árvore Binária
-// Pré-Ordem: RAIZ - ESQUERDA - DIREITA
-void ArvBin_preOrdem(ArvBin *raiz);
-
 // Em-Ordem: ESQUERDA - RAIZ - DIREITA
 void ArvBin_emOrdem(ArvBin *raiz);
-
-// Pós-Ordem: ESQUERDA - DIREITA - RAIZ 
-void ArvBin_posOrdem(ArvBin *raiz);
 
 // Função de Rotação LL
 void ArvBin_RotationLL(ArvBin *raiz);
@@ -51,19 +44,11 @@ void ArvBin_RotationRL(ArvBin *raiz);
 // Inserção de um valor na árvore
 bool ArvBin_insert(ArvBin *raiz, int value, int s, int t, int c); // Retorna 1 se foi efetuada a operação, e 0 se o elemento já existe ou se não alocou
 
-// Remoção de um valor da árvore (sem valores repetidos)
-Node *procuraMenor(Node *atual);
-bool ArvBin_remove(ArvBin *raiz, int value); // Busca o nó a ser removido
-
-// Função para consultar se existe um valor na árvore
-bool ArvBin_consult(ArvBin *raiz, int value);
-
 //************************************************************************//
 
 // Implementação do TAD
 
 // Implementação do nó 
-
 typedef struct _node{
     int info; // Informação que ele carrega
     int s, t, c;
@@ -80,6 +65,9 @@ Node *ArvBin_Node_create(int value, int s, int t, int c){
     }
 
     node->info = value;
+    node->s = s;
+    node->t = t;
+    node->c = c;
     node->alt = 0;
     node->dir = NULL;
     node->esq = NULL;
@@ -144,46 +132,14 @@ int ArvBin_height(ArvBin *raiz){
     }
 }
 
-int ArvBin_amount_nodes(ArvBin *raiz){
-    if(ArvBin_is_empty(raiz)){ // Condição de parada
-        return 0;
-    }
-    int left_height = ArvBin_amount_nodes(&((*raiz)->esq));
-    int right_height = ArvBin_amount_nodes(&((*raiz)->dir));
-
-    return (left_height + right_height + 1); // + 1 é o pai
-}
-
-void ArvBin_preOrdem(ArvBin *raiz){
-    if(raiz == NULL){ // Se não alocou corretamente, a função para
-        return; // Condição de parada
-    }
-    if(!ArvBin_is_empty(raiz)){ // Se a árvore não estiver vazia
-        printf("%d\n", (*raiz)->info); // RAIZ
-        ArvBin_preOrdem(&((*raiz)->esq)); // ESQUERDA
-        ArvBin_preOrdem(&((*raiz)->dir)); // DIREITA
-    }
-}
-
 void ArvBin_emOrdem(ArvBin *raiz){
     if(raiz == NULL){ // Se não alocou corretamente, a função para
         return; // Condição de parada
     }
     if(!ArvBin_is_empty(raiz)){ // Se a árvore não estiver vazia
-        ArvBin_emOrdem(&((*raiz)->esq)); // ESQUERDA
-        printf("%d\n", (*raiz)->info); // RAIZ
+        ArvBin_emOrdem(&((*raiz)->esq)); // ESQUERDA // printf("%d %d %d\n",(*raiz)->s, (*raiz)->t, (*raiz)->c);
+        printf("%d %d %d\n", (*raiz)->s, (*raiz)->t, (*raiz)->c); // RAIZ
         ArvBin_emOrdem(&((*raiz)->dir)); // DIREITA
-    }
-}
-
-void ArvBin_posOrdem(ArvBin *raiz){
-    if(raiz == NULL){ // Se não alocou corretamente, a função para
-        return; // Condição de parada
-    }
-    if(!ArvBin_is_empty(raiz)){ // Se a árvore não estiver vazia
-        ArvBin_posOrdem(&((*raiz)->esq)); // ESQUERDA
-        ArvBin_posOrdem(&((*raiz)->dir)); // DIREITA
-        printf("%d\n", (*raiz)->info); // RAIZ
     }
 }
 
@@ -294,93 +250,6 @@ bool ArvBin_insert(ArvBin *raiz, int value, int s, int t, int c){ // Sempre a in
     return res;
 }
 
-Node *procuraMenor(Node *atual){
-    Node *no1 = atual;
-    Node *no2 = atual->esq;
-    while(no2 != NULL){
-        no1 = no2;
-        no2 = no2->esq;
-    }
-    return no1;
-}
-
-bool ArvBin_remove(ArvBin *raiz, int value){
-	if(*raiz == NULL){// value nao existe
-	    printf("Esse valor nao existe!\n");
-	    return 0;
-	}
-
-    int res;
-	if(value < (*raiz)->info){
-	    if((res = ArvBin_remove(&(*raiz)->esq,value)) == 1){
-            if(fatorBalanceamento_node(*raiz) >= 2){
-                if(alt_node((*raiz)->dir->esq) <= alt_node((*raiz)->dir->dir))
-                    ArvBin_RotationRR(raiz);
-                else
-                    ArvBin_RotationRL(raiz);
-            }
-	    }
-	}
-
-	if((*raiz)->info < value){
-	    if((res = ArvBin_remove(&(*raiz)->dir, value)) == 1){
-            if(fatorBalanceamento_node(*raiz) >= 2){
-                if(alt_node((*raiz)->esq->dir) <= alt_node((*raiz)->esq->esq) )
-                    ArvBin_RotationLL(raiz);
-                else
-                    ArvBin_RotationLR(raiz);
-            }
-	    }
-	}
-
-	if((*raiz)->info == value){
-	    if(((*raiz)->esq == NULL || (*raiz)->dir == NULL)){// no tem 1 filho ou nenhum
-			Node *oldNode = (*raiz);
-			if((*raiz)->esq != NULL)
-                *raiz = (*raiz)->esq;
-            else
-                *raiz = (*raiz)->dir;
-			free(oldNode);
-		}else { // no tem 2 filhos
-			Node* temp = procuraMenor((*raiz)->dir);
-			(*raiz)->info = temp->info;
-			ArvBin_remove(&(*raiz)->dir, (*raiz)->info);
-            if(fatorBalanceamento_node(*raiz) >= 2){
-				if(alt_node((*raiz)->esq->dir) <= alt_node((*raiz)->esq->esq))
-					ArvBin_RotationLL(raiz);
-				else
-					ArvBin_RotationLR(raiz);
-			}
-		}
-		if (*raiz != NULL)
-            (*raiz)->alt = maior(alt_node((*raiz)->esq),alt_node((*raiz)->dir)) + 1;
-		return 1;
-	}
-
-	(*raiz)->alt = maior(alt_node((*raiz)->esq),alt_node((*raiz)->dir)) + 1;
-
-	return res;
-}
-
-bool ArvBin_consult(ArvBin *raiz, int value){
-    if(raiz == NULL){
-        return 0;
-    }
-    Node *atual = *raiz;
-    while(atual != NULL){
-        if(atual->info == value){
-            return 1;
-        }
-        if(value > atual->info){
-            atual = atual->dir;
-        }
-        else{
-            atual = atual->esq;
-        }
-    }
-    return 0;
-}
-
 int main(){
 
     ArvBin *avl = ArvBin_create();
@@ -392,6 +261,8 @@ int main(){
 
     ArvBin_emOrdem(avl);
     printf("%d", ArvBin_height(avl));
+
+    ArvBin_destroy(avl);
 
     return 0;
 }
