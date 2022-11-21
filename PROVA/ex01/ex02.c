@@ -137,7 +137,7 @@ void ArvBin_emOrdem(ArvBin *raiz){
         return; // Condição de parada
     }
     if(!ArvBin_is_empty(raiz)){ // Se a árvore não estiver vazia
-        ArvBin_emOrdem(&((*raiz)->esq)); // ESQUERDA // printf("%d %d %d\n",(*raiz)->s, (*raiz)->t, (*raiz)->c);
+        ArvBin_emOrdem(&((*raiz)->esq)); // ESQUERDA 
         printf("%d %d %d\n", (*raiz)->s, (*raiz)->t, (*raiz)->c); // RAIZ
         ArvBin_emOrdem(&((*raiz)->dir)); // DIREITA
     }
