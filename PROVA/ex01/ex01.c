@@ -27,7 +27,7 @@ int ArvBin_height(ArvBin *raiz); // Recebe inicialmente a raiz da árvore a ser 
 int ArvBin_amount_nodes(ArvBin *raiz);
 
 // Em-Ordem: ESQUERDA - RAIZ - DIREITA
-void ArvBin_emOrdem(ArvBin *raiz);
+void ArvBin_preOrdem(ArvBin *raiz);
 
 // Função de Rotação LL
 void ArvBin_RotationLL(ArvBin *raiz);
@@ -132,14 +132,14 @@ int ArvBin_height(ArvBin *raiz){
     }
 }
 
-void ArvBin_emOrdem(ArvBin *raiz){
+void ArvBin_preOrdem(ArvBin *raiz){
     if(raiz == NULL){ // Se não alocou corretamente, a função para
         return; // Condição de parada
     }
     if(!ArvBin_is_empty(raiz)){ // Se a árvore não estiver vazia
-        ArvBin_emOrdem(&((*raiz)->esq)); // ESQUERDA 
         printf("%d %d %d\n", (*raiz)->s, (*raiz)->t, (*raiz)->c); // RAIZ
-        ArvBin_emOrdem(&((*raiz)->dir)); // DIREITA
+        ArvBin_preOrdem(&((*raiz)->esq)); // ESQUERDA 
+        ArvBin_preeOrdem(&((*raiz)->dir)); // DIREITA
     }
 }
 
