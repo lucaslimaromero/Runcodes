@@ -134,7 +134,7 @@ void List_remove(List *L){
 void List_print(const List *L){
 
     if(List_is_empty(L)){
-        printf("Lista Vazia\n");
+        printf("Fila Vazia\n");
     }
     else{
         Node *p = L->begin;
@@ -150,7 +150,7 @@ void List_print(const List *L){
 void List_inverted_print(const List *L){
 
     if(List_is_empty(L)){
-        printf("Lista Vazia\n");
+        printf("Fila Vazia\n");
     }
     else{
         Node *p = L->end;
@@ -162,8 +162,39 @@ void List_inverted_print(const List *L){
     }
 }
 
+// Função para ler comandos
+char *ReadLine_comando(){ // Essa função retorna uma string alocada dinamicamente a cada char
+    char *line = NULL;
+    char c = '\0';
+    int size = 0;
+
+    while ((c = getchar()) == '\n' || c == '\r');
+
+    if (c != EOF)
+        ungetc(c, stdin);
+    else
+        exit(0);
+
+    do{
+        c = getchar();
+        line = (char *) realloc(line, ++size * sizeof(char));
+        line[size - 1] = c;
+
+    } while(c != ' ' && c != '\n' && c != '\r' && c != EOF);
+
+    line[size - 1] = '\0';
+
+    if(size >= 50){ // Verificar se é >= ou apenas >
+        printf("INVALIDO\n");
+        return NULL;
+    }
+    else{
+        return line;
+    }
+}
+
 // Função para ler nomes
-char *ReadLine(){ // Essa função retorna uma string alocada dinamicamente a cada char
+char *ReadLine_nomes(){ // Essa função retorna uma string alocada dinamicamente a cada char
     char *line = NULL;
     char c = '\0';
     int size = 0;
@@ -178,11 +209,7 @@ char *ReadLine(){ // Essa função retorna uma string alocada dinamicamente a ca
         line = (char *) realloc(line, ++size * sizeof(char));
         line[size - 1] = c;
 
-    } while(c != ' ' && c != '\n' && c != '\r' && c != EOF);
-
-    if(c == EOF){
-        exit(0);
-    }
+    } while(c != '\n' && c != '\r' && c != EOF);
 
     line[size - 1] = '\0';
 

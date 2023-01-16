@@ -28,7 +28,6 @@ int otimizada(int n, int m){
         else{
             *op2 += 2;
             return (n * n) * otimizada(n * n, m / 2 - 1);
-            
         }
         
     }

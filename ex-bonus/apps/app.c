@@ -19,11 +19,11 @@ int main(){
 
     while(1){
    
-        comando = ReadLine();
+        comando = ReadLine_comando();
         if(strcmp(comando, "Inserir") == 0){
             scanf("%d", &priority);
             getchar();
-            name = ReadLine();
+            name = ReadLine_nomes();
             if(name != NULL){
                 List_add(L, name, priority);
             }
@@ -38,11 +38,11 @@ int main(){
             List_inverted_print(L);
         }
         // Para teste
-        // else if(strcmp(comando, "x") == 0){
-        //     break;
-        // }
+        else if(strcmp(comando, "x") == 0){
+            break;
+        }
         else{
-            printf("Comando Invalido\n");
+            printf("Comando Inválido\n");
         }
     }
 

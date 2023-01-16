@@ -34,8 +34,11 @@ void List_inverted_print(const List *L);
 // Função de Remoção de elementos da lista
 void List_remove(List *L);
 
+// Função de ler dinamicamente um comando
+char *ReadLine_comando();
+
 // Função de ler dinamicamente um nome
-char *ReadLine();
+char *ReadLine_nomes();
 
 //*************************************************************************************//
 

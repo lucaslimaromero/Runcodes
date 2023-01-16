@@ -42,4 +42,5 @@ o necessario
 - De alguma forma, quando ocorre uma adição no meio, as funções print bugam conforme explicitado acima (SOLVED)
 - O nome colocado no meio da lista passa a ser o limite final da função print e inicial da função inverted print (SOLVED)
 - Além disso, se colocarmos 2 nomes no meio da lista, o programa finaliza com o código de erro: make: ***  [Error-1073741819] (SOLVED)
+- Problema no EOF quando ocorre um comando de impressão. Meu programa finaliza antes de imprimir
 
